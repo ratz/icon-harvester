@@ -11,43 +11,43 @@ $id = (int) $_GET['id'];
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
 $html = download("http://macthemes2.net/forum/viewtopic.php?id=$id&p=$page");
-$xml = parse_html($html);
+$doc = phpQuery::newDocument($html);
 
-$posts = $xml->xpath('//div[@id="punviewtopic"]//div[contains(@class, "blockpost")]');
+$posts = $doc->find('#punviewtopic .blockpost');
 $icons = array();
 
-$theme_title = $xml->xpath('//head/title');
+$theme_title = $doc->find('head title');
 $theme_title = strip_tag_prefix((string) $theme_title[0]);
 $theme_author = false;
 
-foreach ($posts as $xpost) {
-	$full_post = simplexml_load_string($xpost->asXML());
-	$author = $full_post->xpath('//div[@class="postleft"]//a');
-	$author = (string) $author[0];
+foreach ($posts as $full_post) {
+	$full_post = pq($full_post);
+	#$full_post = simplexml_load_string($xpost->asXML());
+	$author = $full_post['.postleft dt a'];
+	$author = $author[0]->text();
 
-	if (!$theme_author && strpos($full_post['class'], 'firstpost') !== false) {
+	if (!$theme_author && strpos($full_post->attr('class'), 'firstpost') !== false) {
 		$theme_author = $author;
 	}
 
-	$post = $full_post->xpath('//div[@class="postmsg"][1]');
-	$post = simplexml_load_string($post[0]->asXML());
-
-	$post_icons = $post->xpath('//img[@class="postimg"]');
+	$post = $full_post['.postmsg'][0];
+	$post_icons = $post['img.postimg'];
 
 	if (empty($post_icons)) {
 		continue;
 	}
 
-	$post_text = $post->xpath('*');
-	$post_edit = $post->xpath('div[@class="postedit"]');
-	var_dump($post_edit);
+	$post['blockquote']->remove();
+
+	$post_text = trim($post->html());
+	$post_edit = $post->find('.postedit');
+	#var_dump($post_edit);
 
 	$post_text = str_replace($post_edit, '', $post_text);
 	#gsub(postedit, '').strip.
 		#gsub('</p>\s+<p>', "\n").gsub(/^<p>|<\/p>$/, '').gsub(/<br *\/?X>/, "\n")
 
-	var_dump($post_icons);
-	var_dump($post_text[0]->asXml());
+	echo $post_icons;
 
 	/*
 	$icons[] = array(
@@ -57,8 +57,6 @@ foreach ($posts as $xpost) {
 	);
 	 */
 }
-
-var_dump($icons);
 
 /*
 if ($return_json) {

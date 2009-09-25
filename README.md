@@ -13,7 +13,9 @@ Dependencies
 ### Live Server (PHP) ###
 
 * PHP >= 5.2
-* cURL
+* cURL extension
+* [phpQuery][]. Drop phpQuery.php and the phpQuery folder into the root
+  folder of Icon Harvester.
 
 ### Prototype (Ruby) ###
 
@@ -27,3 +29,4 @@ Fire up Sinatra with `ruby site.rb`, and go to
 [Hpricot]: http://github.com/hpricot/hpricot
 [Sinatra]: http://www.sinatrarb.com/
 [MacThemes]: http://macthemes2.net/forums
+[phpQuery]: http://code.google.com/p/phpquery/

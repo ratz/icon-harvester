@@ -40,4 +40,6 @@ function parse_html($html) {
 function strip_tag_prefix($name) {
 	return trim(substr($name, strpos($name, ']') + 1));
 }
+
+require 'phpQuery.php';
 ?>

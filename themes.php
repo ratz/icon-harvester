@@ -6,21 +6,19 @@ $return_json = false;
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
 $html = download("http://macthemes2.net/forum/viewforum.php?id=24&p=$page");
-$xml = parse_html($html);
+$doc = phpQuery::newDocument($html);
 
-$rows = $xml->xpath('//div[@id="punviewforum"]//table//tr/td[@class="tcl"]/..');
+$rows = $doc['#punviewforum table tr > td.tcl']->parent();
 $themes = array();
 $viewtopic_length = strlen('viewtopic.php?id=');
 
-foreach ($rows as $rsrow) {
-	$row = simplexml_load_string($rsrow->asXML());
-	$a = $row->xpath('//a[1]');
-	$a = $a[0];
-	$name = (string) $a;
+foreach ($rows as $row) {
+	$row = pq($row);
+	$a = $row['a:first'][0];
+	$name = $a->text();
 
-	if (preg_match('/\[(theme|contest|contest theme)\]/i', $name)) {
-		$author = $row->xpath('//td[@class="tc4"]');
-		$author = (string) $author[0];
+	if (preg_match('/\[(theme|contest|contest theme)\]/iu', $name)) {
+		$author = $row['td.tc4'][0]->text();
 
 		$byPos = strpos($name, 'by');
 		if ($byPos !== false) {
@@ -31,7 +29,7 @@ foreach ($rows as $rsrow) {
 
 		$themes[] = array(
 			'name' => $name,
-			'id' => substr($a['href'], $viewtopic_length),
+			'id' => substr($a->attr('href'), $viewtopic_length),
 			'author' => $author,
 		);
 	}
