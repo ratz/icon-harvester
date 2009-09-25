@@ -11,6 +11,13 @@ date_default_timezone_set('UTC');
 ob_start('mb_output_handler');
 
 function download($url) {
+	$hash = sha1($url);
+	$cache_file = "cache/$hash.txt";
+
+	if (file_exists($cache_file)) {
+		return file_get_contents($cache_file);
+	}
+
 	$curl_options = array(
 		CURLOPT_RETURNTRANSFER	=> true,
 		CURLOPT_HEADER			=> false
@@ -18,7 +25,9 @@ function download($url) {
 
 	$ch = curl_init($url);
 	curl_setopt_array($ch, $curl_options);
-	return curl_exec($ch);
+	$data = curl_exec($ch);
+	file_put_contents($cache_file, $data);
+	return $data;
 }
 
 function parse_html($html) {
