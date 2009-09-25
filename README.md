@@ -4,8 +4,18 @@ Icon Harvester
 A little tool for pulling iPhone icons out of forum threads;
 [MacThemes][], in particular.
 
+The original prototype was written in Ruby, but due to personal web host
+constraints, the live server is written in PHP.
+
 Dependencies
 ------------
+
+### Live Server (PHP) ###
+
+* PHP >= 5.2
+* cURL
+
+### Prototype (Ruby) ###
 
 You'll need [Ruby][] and [Hpricot][] to run the core program, and
 [Sinatra][] if you want to run the web server.
