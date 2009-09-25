@@ -20,7 +20,7 @@ foreach ($rows as $row) {
 	if (preg_match('/\[(theme|contest|contest theme)\]/iu', $name)) {
 		$author = $row['td.tc4'][0]->text();
 
-		$byPos = strpos($name, 'by');
+		$byPos = strrpos($name, ' by ');
 		if ($byPos !== false) {
 			$name = substr($name, 0, $byPos);
 		}
