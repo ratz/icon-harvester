@@ -43,3 +43,25 @@ function strip_tag_prefix($name) {
 
 require 'phpQuery.php';
 ?>
+
+<style type="text/css">
+	body {
+		background:white;
+	}
+	.progress {
+		width: 10em;
+		height: 2em;
+		background:inherit;
+		position:absolute;
+		top:0.5em;
+		left:0.5em;
+	}
+	ul.icons {
+		list-style:none;
+		padding:0;
+	}
+	ul.icons li  {
+		display:inline;
+		padding:2px;
+	}
+</style>
