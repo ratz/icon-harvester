@@ -14,8 +14,8 @@ Dependencies
 
 * PHP >= 5.2
 * cURL extension
-* [phpQuery][]. Drop phpQuery.php and the phpQuery folder into the root
-  folder of Icon Harvester.
+* [phpQuery][]. Drop phpQuery.php and the phpQuery folder into the
+  server folder.
 
 ### Prototype (Ruby) ###
 

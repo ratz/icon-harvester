@@ -2,6 +2,6 @@
 Thumbs.db
 *.swp
 *.swo
-/cache
-/phpQuery
-/phpQuery.php
+cache/
+/server/phpQuery
+/server/phpQuery.php
