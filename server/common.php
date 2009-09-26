@@ -17,7 +17,7 @@ function url_cache_file($url) {
 }
 
 function is_cache_valid($file) {
-	return (file_exists($file) && filemtime($file) < CACHE_EXPIRE);
+	return (file_exists($file) && (time() - filemtime($file)) < CACHE_EXPIRE);
 }
 
 function download($url) {
