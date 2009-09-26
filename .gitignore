@@ -5,3 +5,6 @@ Thumbs.db
 cache/
 /server/phpQuery
 /server/phpQuery.php
+/server/public/css/
+/server/public/images/grid.png
+.sass-cache/

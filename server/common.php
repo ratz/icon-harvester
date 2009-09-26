@@ -8,19 +8,30 @@ mb_http_input('UTF-8');
 mb_language('uni');
 mb_regex_encoding('UTF-8');
 date_default_timezone_set('UTC');
-ob_start('mb_output_handler');
+
+define('CACHE_EXPIRE', 60*60*3);
+
+function url_cache_file($url) {
+	$hash = sha1($url);
+	return $_ENV['dir.temp']."url-$hash.txt";
+}
+
+function is_cache_valid($file) {
+	return (file_exists($file) && filemtime($file) < CACHE_EXPIRE);
+}
 
 function download($url) {
-	$hash = sha1($url);
-	$cache_file = "cache/$hash.txt";
+	$cache_file = url_cache_file($url);
 
-	if (file_exists($cache_file)) {
+	if (is_cache_valid($cache_file)) {
 		return file_get_contents($cache_file);
 	}
 
 	$curl_options = array(
 		CURLOPT_RETURNTRANSFER	=> true,
-		CURLOPT_HEADER			=> false
+		CURLOPT_HEADER			=> false,
+		CURLOPT_FOLLOWLOCATION  => true,
+		CURLOPT_MAXREDIRS       => 3,
 	);
 
 	$ch = curl_init($url);
@@ -30,38 +41,9 @@ function download($url) {
 	return $data;
 }
 
-function parse_html($html) {
-	$doc = new DOMDocument();
-	$doc->strictErrorChecking = false;
-	$doc->loadHTML($html);
-	return simplexml_import_dom($doc);
-}
-
 function strip_tag_prefix($name) {
 	return trim(substr($name, strpos($name, ']') + 1));
 }
 
 require 'phpQuery.php';
 ?>
-
-<style type="text/css">
-	body {
-		background:white;
-	}
-	.progress {
-		width: 10em;
-		height: 2em;
-		background:inherit;
-		position:absolute;
-		top:0.5em;
-		left:0.5em;
-	}
-	ul.icons {
-		list-style:none;
-		padding:0;
-	}
-	ul.icons li  {
-		display:inline;
-		padding:2px;
-	}
-</style>
